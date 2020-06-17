@@ -1,0 +1,8 @@
+[Unit]
+Description=roslaunch
+
+[Service]
+ExecStart=/home/pluto/bin/doroslaunch.sh
+
+[Install]
+WantedBy=default.target
