@@ -1,0 +1,59 @@
+<launch>
+  
+
+  <!-- Load the URDF/Xacro model of our robot -->  
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find rbx1_description)/urdf/turtlebot.urdf.xacro'" />
+   
+  <param name="robot_description" command="$(arg urdf_file)" />
+    
+
+   <!-- launch ROS Arduino Bridge node for base motor control -->
+   <include file="$(find ros_arduino_python)/launch/arduino.launch"/>
+
+   <!-- launch the RPLidar node for LIDAR control-->
+   <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+
+
+  <!-- Run a static transform between /base_link and /base_footprint needed for SLAM -->
+  <node pkg="tf" type="static_transform_publisher" name="base_footprint_broadcaster" args="0 0 0 3.14 0 0 /base_footprint /laser 100" />
+
+  <!-- Run a static transform between /odom and /map -->
+   <!--<node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" /> -->
+
+  
+   <!-- launch the Dynamixels node for control of the head motors-->
+ <!--  <include file="$(find rbx1_dynamixels)/launch/dynamixels.launch"/> -->
+
+   <!-- launch the Joy node for joystick control-->
+ <!--  <node name="joy_node" pkg="joy" type="joy_node" /> -->
+
+   <!-- launch the driving node for robot joystick control-->
+ <!--  <include file="$(find ros_driving)/launch/driving.launch"/> -->
+
+
+ 
+   <!-- <include file="$(find turtlebot_rviz_launchers)/launch/view_robot.launch"/> -->
+  <!--  <include file="$(find turtlebot_teleop)/launch/keyboard_t.launch"/> -->
+
+
+
+
+
+  <!-- Run the map server with a blank map -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find pluto)/maps/blank_map.yaml"/>
+    
+  <!-- Load map parameters -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" clear_params="true">
+    <rosparam file="$(find pluto)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find pluto)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find pluto)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find pluto)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find pluto)/config/base_local_planner_params.yaml" command="load" />
+  </node>
+
+
+  <include file="$(find rbx1_nav)/launch/gmapping.launch"/>
+
+</launch>
+
+

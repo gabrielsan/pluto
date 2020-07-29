@@ -1,3 +1,15 @@
 [submodule "src/odrive_ros"]
 	path = src/odrive_ros
 	url = https://github.com/gabrielsan/odrive_ros.git
+[submodule "src/rplidar_ros"]
+	path = src/rplidar_ros
+	url = https://github.com/gabrielsan/rplidar_ros.git
+[submodule "src/ros_driving"]
+	path = src/ros_driving
+	url = https://github.com/gabrielsan/ros_driving.git
+[submodule "src/ds4_driver"]
+	path = src/ds4_driver
+	url = https://github.com/gabrielsan/ds4_driver.git
+[submodule "src/ds4drv"]
+	path = src/ds4drv
+	url = https://github.com/gabrielsan/ds4drv.git
