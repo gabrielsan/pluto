@@ -1,38 +1,19 @@
 <launch>
-  
-   <!-- Load the URDF/Xacro model of our robot -->  
-   <!--<arg name="urdf_file" default="$(find xacro)/xacro.py '$(find rbx1_description)/urdf/turtlebot.urdf.xacro'" />--> 
-   
-   <!--<param name="robot_description" command="$(arg urdf_file)" />-->
-    
+    <!-- launch ROS ODrive control -->
+    <include file="$(find odrive_ros)/launch/odrive.launch"/>
 
-   <!-- launch ROS ODrive control -->
-   <include file="$(find odrive_ros)/launch/odrive.launch"/>
+    <!-- launch the DualShock node-->
+    <include file="$(find ds4_driver)/launch/ds4_driver.launch"/>
 
-   <!-- launch the RPLidar node for LIDAR control-->
-   <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+    <!-- launch the driving node for robot joystick control-->
+    <include file="$(find ros_driving)/launch/driving.launch"/>
 
-
-  <!-- Run a static transform between /base_link and /base_footprint needed for SLAM -->
-  <node pkg="tf" type="static_transform_publisher" name="base_footprint_broadcaster" args="0 0 0 3.14 0 0 /base_footprint /laser 100" />
-
-  <!-- Run a static transform between /odom and /map -->
-  <node pkg="tf" type="static_transform_publisher" name="odom_map_broadcaster" args="0 0 0 0 0 0 /map /odom 100" />
-
-  
-   <!-- launch the Dynamixels node for control of the head motors-->
-   <!-- <include file="$(find rbx1_dynamixels)/launch/dynamixels.launch"/> -->
-
-   <!-- launch the DualShock node-->
-   <include file="$(find ds4_driver)/launch/ds4_driver.launch"/>
-
-
-   <!-- launch the driving node for robot joystick control-->
-   <include file="$(find ros_driving)/launch/pluto_driving.launch"/>
-
-   <!-- launch move_base with a blank map -->
-   <!--<include file="$(find rbx1_nav)/launch/tb_move_base_blank_map.launch"/>-->
-
+    <node
+        pkg="odrv_monitor"
+        type="odrv_monitor.py"
+        name="odrv_monitor"
+        required="true"
+    />
 </launch>
 
 
